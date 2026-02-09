@@ -1,0 +1,90 @@
+Library IEEE;
+USE IEEE.std_logic_1164.all;
+use IEEE.numeric_std.all;
+
+Entity functionunit is
+
+port(
+	A, B: in std_logic_vector(31 downto 0); --Entrada A e B
+	HS:in std_logic_vector(1 downto 0); -- Controla o shifter
+	MF:in std_logic;-- Controla quem vai ser a saida do mux
+	S:out std_logic_vector(31 downto 0); --Saida
+	gsel: in std_logic_vector(3 downto 0); --Seletor de função
+	Cout: out std_logic --Carry out
+);
+
+end functionunit;
+
+architecture arq of functionunit is
+
+signal S_ULA, S_SHIFT, S_SOMA, B_SOMADOR: std_logic_vector(31 downto 0);
+
+component somadorN is
+Generic (N : integer := 32);
+Port(A,B : in std_logic_vector(N-1 downto 0);
+     S : out std_logic_vector(N-1 downto 0);
+	  Cout : out std_logic);
+end component;
+
+
+begin
+	somadorN_inst: somadorN
+		port map(
+				A => A,
+				B => B_SOMADOR, --Precisei criar esse sinal pois process nao aceita escrita IN
+				S => S_SOMA,
+				Cout => Cout
+		);
+			 
+	process(A, B, gsel, S_SOMA)
+	begin
+		B_SOMADOR <= (others => '0');
+		case gsel is
+			when "0000" => 
+			S_ULA <= A;
+			when "0001" => 
+			B_SOMADOR <= B;
+			S_ULA <= B;
+			when "0010" => 
+			B_SOMADOR <= B;
+			S_ULA <= S_SOMA; 
+			when "0011" => 
+			B_SOMADOR <= (31 downto 1 => '0') & '1';
+			S_ULA <= S_SOMA;         
+			when "0100" => 
+			B_SOMADOR <= std_logic_vector(-signed(B));
+			S_ULA <= S_SOMA;
+			when "0101" => 
+			B_SOMADOR <= (31 downto 2 => '0') & "10";
+			S_ULA <= S_SOMA;
+			when "0110" => 
+			B_SOMADOR <= NOT(B);
+			S_ULA <= S_SOMA;
+			when "0111" => 
+			B_SOMADOR <= NOT(std_logic_vector(-signed(B)));
+			S_ULA <= S_SOMA;
+			when "1000" => S_ULA <= A AND B;
+			when "1001" => S_ULA <= A OR B;
+			when "1010" => S_ULA <= A XOR B;
+			when "1011" => S_ULA <= NOT A;
+			when "1100" => S_ULA <= NOT B;
+			when "1101" => S_ULA <= A OR (NOT B);
+			when "1110" => S_ULA <= A AND (NOT B);
+			when "1111" => S_ULA <= A XOR (NOT B);
+
+		end case;
+	end process;
+	
+	process(HS, B)
+	begin
+		 case HS is
+			  when "01" => S_SHIFT <= B(30 downto 0) & "0";
+			  when "10" => S_SHIFT <= "0" & B(31 downto 1);
+			  when others => S_SHIFT <= B; 
+		 end case;
+	end process;
+	
+	
+	S <= S_ULA  when MF = '0' else S_SHIFT;
+	
+end arq;
