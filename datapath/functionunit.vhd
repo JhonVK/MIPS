@@ -31,7 +31,7 @@ begin
 	somadorN_inst: somadorN
 		port map(
 				A => A,
-				B => B_SOMADOR, --Precisei criar esse sinal pois process nao aceita escrita IN
+				B => B_SOMADOR,
 				S => S_SOMA,
 				Cout => Cout
 		);
