@@ -8,8 +8,8 @@ port(
 	clk: in std_logic; --clock dos process que usam
 	reset: in std_logic;-- reset
 	LE: in std_logic; -- Load enable
-	AS, BS: in std_logic_vector(2 downto 0);  -- Aselect e Bselect
-	DS: in std_logic_vector(2 downto 0); -- Destination select
+	AS, BS: in std_logic_vector(4 downto 0);  -- Aselect e Bselect
+	DS: in std_logic_vector(4 downto 0); -- Destination select
 	HS: in std_logic_vector(1 downto 0); -- Controla o shifter
 	MF: in std_logic;-- Controla quem vai ser a saida do mux
 	MD: in std_logic; -- Controla se é data in ou funcunit
@@ -44,8 +44,8 @@ port(
 	clk: in std_logic;
 	reset: in std_logic;
 	LE: in std_logic; -- Load enable
-	AS, BS: in std_logic_vector(2 downto 0); 
-	DS: in std_logic_vector(2 downto 0); -- Destination select
+	AS, BS: in std_logic_vector(4 downto 0); 
+	DS: in std_logic_vector(4 downto 0); -- Destination select
 	A_out, B_out: out std_logic_vector(31 downto 0); -- saida
 	Ddata: in std_logic_vector(31 downto 0) -- data que sai do MUX D
 );
