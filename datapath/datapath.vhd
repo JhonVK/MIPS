@@ -18,7 +18,8 @@ port(
 	Datain: in std_logic_vector(31 downto 0); -- constante entrada
 	constantin: in std_logic_vector(31 downto 0); -- constante entrada
 	gsel : in std_logic_vector(3 downto 0); --Seletor de função
-	Cout : out std_logic --Carry out
+	Cout : out std_logic; --Carry out
+	OUT_B : out std_logic_vector(31 downto 0)
 );
 
 end datapath;
@@ -83,6 +84,6 @@ begin
 	
 	S <= BUS_D;
 	
-
+	OUT_B <= B_OUT;
 			 
 end arq;
