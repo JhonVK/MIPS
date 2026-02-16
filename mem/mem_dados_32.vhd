@@ -48,6 +48,7 @@ end process;
 
 D_out <= memory(to_integer(unsigned(Addr_in))) when LerMem = '1' else (others => '0');
 DataOut <= D_out;
-DataOutMem <= D_out;
+DataOutMem <= memory(to_integer(unsigned(Addr_in)));
+
 
 end arq;
