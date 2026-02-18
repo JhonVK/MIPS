@@ -16,7 +16,6 @@ entity ParteOperativa is
         LerMem      : in std_logic;
         Branch      : in std_logic;
         opcode      : out std_logic_vector(5 downto 0);
-        DataOutMem  : out std_logic_vector(31 downto 0);
         funct       : out std_logic_vector(5 downto 0)
     );
 end ParteOperativa;
@@ -27,7 +26,6 @@ signal PC_reg      : unsigned(7 downto 0) := (others => '0');
 signal instrucao   : std_logic_vector(31 downto 0);
 signal imm_ext     : std_logic_vector(31 downto 0);
 signal mux_DS      : std_logic_vector(4 downto 0);
-signal ALU_out     : std_logic_vector(31 downto 0); -- saída do mux D (vai pro banco)
 signal ALU_result  : std_logic_vector(31 downto 0); -- saída PURA da ALU (BUG 1)
 signal RAM_out     : std_logic_vector(31 downto 0);
 signal B_OUT_int   : std_logic_vector(31 downto 0);
@@ -98,7 +96,7 @@ DP_INST: entity work.datapath
         MF => MF,
         MD => MD,
         MB => MB,
-        S => ALU_out,          -- saída do mux D → writeback no banco
+        S => open,          -- verificar depois
         ALU_result => ALU_result,  -- BUG 1 CORRIGIDO: saída pura da ALU
         Datain => RAM_out,
         constantin => imm_ext,
@@ -118,8 +116,7 @@ RAM_INST: entity work.mem_dados_32
         -- BUG 1 CORRIGIDO: endereço usa ALU_result (puro), não ALU_out (mux D)
         Addr_in => ALU_result(7 downto 0),
         DataIn => B_OUT_int,
-        DataOut => RAM_out,
-        DataOutMem => DataOutMem
+        DataOut => RAM_out
     );
 
 end arq;

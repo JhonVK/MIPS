@@ -13,8 +13,7 @@ port(
     Addr_in: in std_logic_vector(words-1 downto 0);
     EscMem: in std_logic;
     LerMem: in std_logic; 
-    DataOut: out std_logic_vector(wlength-1 downto 0);
-    DataOutMem : out std_logic_vector(wlength-1 downto 0)
+    DataOut: out std_logic_vector(wlength-1 downto 0)
 );
 end mem_dados_32;
 
@@ -45,6 +44,5 @@ end process;
 -- LerMem controla se a saída é válida ou zero
 DataOut    <= memory(to_integer(unsigned(Addr_in))) when LerMem = '1' else (others => '0');
 
-DataOutMem <= memory(to_integer(unsigned(Addr_in)));
 
 end arq;

@@ -3,8 +3,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity MIPS_Top_Level is
     port (
-        clk, reset : in std_logic;
-		  DataOutMem : out std_logic_vector(31 downto 0)
+        clk, reset : in std_logic
     );
 end MIPS_Top_Level;
 
@@ -35,7 +34,7 @@ begin
             LE => s_EscReg, RegDst => s_RegDst,
             HS => "00", MF => '0', MD => s_MemParaReg, MB => s_ULAFonte,
             gsel => s_gsel, EscMem => s_EscMem, LerMem => s_LerMem,
-            Branch => s_Branch, opcode => s_opcode, funct => s_funct, DataOutMem => DataOutMem
+            Branch => s_Branch, opcode => s_opcode, funct => s_funct
         );
 
 end shell;
