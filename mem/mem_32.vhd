@@ -32,8 +32,8 @@ architecture arq of mem_32 is
         -- 3: MULT $4, $1, $2 -> $4 = $1 * $2 (Usando seu hardware customizado)
         -- Opcode 0 (R-Type), funct 24 (MULT custom). rd=$4
         -- Hex: 00222018
-        3 => x"00222018",
-    
+        3 => x"00000000",
+
         -- 4: SW $3, 8($0) -> Escreve o valor de $3 na MemDados[8]
         -- Opcode 43 (SW)
         -- Hex: AC030008

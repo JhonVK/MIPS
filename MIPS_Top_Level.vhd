@@ -16,11 +16,18 @@ architecture shell of MIPS_Top_Level is
 begin
 
     CONTROLE: entity work.ParteControle
-        port map (
-            opcode => s_opcode, RegDst => s_RegDst, EscReg => s_EscReg,
-            ULAFonte => s_ULAFonte, EscMem => s_EscMem, LerMem => s_LerMem,
-            MemParaReg => s_MemParaReg, Branch => s_Branch, gsel => s_gsel
-        );
+    port map (
+        opcode => s_opcode,
+        funct  => s_funct,
+        RegDst => s_RegDst,
+        EscReg => s_EscReg,
+        ULAFonte => s_ULAFonte,
+        EscMem => s_EscMem,
+        LerMem => s_LerMem,
+        MemParaReg => s_MemParaReg,
+        Branch => s_Branch,
+        gsel => s_gsel
+    );
 
     OPERATIVA: entity work.ParteOperativa
         port map (
