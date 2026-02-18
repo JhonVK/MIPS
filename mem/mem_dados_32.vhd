@@ -44,7 +44,7 @@ end process;
 -- BUG 2 CORRIGIDO: Leitura COMBINACIONAL (era síncrona, causava atraso de 1 ciclo)
 -- LerMem controla se a saída é válida ou zero
 DataOut    <= memory(to_integer(unsigned(Addr_in))) when LerMem = '1' else (others => '0');
--- Por isso (mostra sempre RAM[8] pra debug):
-DataOutMem <= memory(8);
+
+DataOutMem <= memory(to_integer(unsigned(Addr_in)));
 
 end arq;

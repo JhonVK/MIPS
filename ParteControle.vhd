@@ -44,24 +44,29 @@ begin
 
                 case funct is
 
-                    -- ADD  (funct = 100000)
+                    -- MULT customizado  funct=011000 (0x18)
+                    -- gsel=0000 -> functionunit aciona o multiplicador matricial
+                    -- $rd = $rs(15:0) * $rt(15:0)  (resultado 32 bits)
+                    when "011000" =>
+                        gsel <= "0000";
+
+                    -- ADD  funct=100000
                     when "100000" =>
-                        gsel <= "0010";  -- A + B
+                        gsel <= "0010";
 
-                    -- BUG 3 CORRIGIDO: SUB usava "0110" = A + NOT(B) = A-B-1
-                    -- Agora usa "0100" = A + (-B) = A - B (correto)
+                    -- SUB  funct=100010
                     when "100010" =>
-                        gsel <= "0100";  -- A + (-B) = A - B
+                        gsel <= "0100";
 
-                    -- AND (funct = 100100)
+                    -- AND  funct=100100
                     when "100100" =>
                         gsel <= "1000";
 
-                    -- OR  (funct = 100101)
+                    -- OR   funct=100101
                     when "100101" =>
                         gsel <= "1001";
 
-                    -- XOR (funct = 100110)
+                    -- XOR  funct=100110
                     when "100110" =>
                         gsel <= "1010";
 
