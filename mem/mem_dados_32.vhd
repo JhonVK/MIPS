@@ -43,12 +43,20 @@ begin
     end if;
 end process;
 
+-- Leitura síncrona
+process(clk)
+begin
+    if rising_edge(clk) then
+        if LerMem = '1' then
+            D_out <= memory(to_integer(unsigned(Addr_in)));
+        else
+            D_out <= (others => '0');
+        end if;
+    end if;
+end process;
 
--- Leitura assíncrona
-
-D_out <= memory(to_integer(unsigned(Addr_in))) when LerMem = '1' else (others => '0');
 DataOut <= D_out;
-DataOutMem <= memory(to_integer(unsigned(Addr_in)));
+DataOutMem <= D_out;
 
 
 end arq;

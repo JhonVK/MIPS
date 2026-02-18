@@ -71,7 +71,8 @@ begin
 			when "1101" => S_ULA <= A OR (NOT B);
 			when "1110" => S_ULA <= A AND (NOT B);
 			when "1111" => S_ULA <= A XOR (NOT B);
-
+			when others =>   S_ULA <= (others => '0');
+          
 		end case;
 	end process;
 	

@@ -28,6 +28,11 @@ Port(a, b : in std_logic_vector(15 downto 0);
 
 End Component;
 
+type a_somas_type is array(14 downto 0) of std_logic_vector(15 downto 0);
+signal a_somas : a_somas_type;
+
+signal a_s0 : std_logic_vector(15 downto 0);
+
 begin
 
 -- gerador dos produtos parciais
@@ -37,21 +42,31 @@ G0: for i in 0 to 15 generate
 			end generate;
 	end generate;
 
-S0: soma16b port map(a => '0' & pp(0)(15 downto 1),
-						  b => pp(1),
-						  s => soma(0),
-						  cout => c(0));
+a_s0 <= '0' & pp(0)(15 downto 1);
+
+S0: soma16b 
+    port map(
+        a => a_s0,
+        b => pp(1),
+        s => soma(0),
+        cout => c(0)
+    );
 				
 	
 gen_somas: for i in 2 to 15 generate
-				soma_i: soma16b 
-						port map(
-							 a => c(i-2) & soma(i-2)(15 downto 1),
-							 b => pp(i),
-							 s => soma(i-1),
-						    cout => c(i-1)
-						);
-			  end generate;
+
+    a_somas(i-1) <= c(i-2) & soma(i-2)(15 downto 1);
+
+    soma_i: soma16b 
+        port map(
+            a => a_somas(i-1),
+            b => pp(i),
+            s => soma(i-1),
+            cout => c(i-1)
+        );
+
+end generate;
+
 saida(0) <= pp(0)(0);
 saida(1) <= soma(0)(0);
 saida(2) <= soma(1)(0);
