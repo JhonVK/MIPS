@@ -10,7 +10,6 @@ Port(a, b : in std_logic_vector(15 downto 0);
 
 End soma16b;
 
-
 architecture arq of soma16b is
 signal aux_a, aux_b, aux_s : std_logic_vector(16 downto 0);
 

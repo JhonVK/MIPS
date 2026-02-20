@@ -51,8 +51,7 @@ S0: soma16b
         s => soma(0),
         cout => c(0)
     );
-				
-	
+					
 gen_somas: for i in 2 to 15 generate
 
     a_somas(i-1) <= c(i-2) & soma(i-2)(15 downto 1);

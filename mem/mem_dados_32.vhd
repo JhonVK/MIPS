@@ -24,7 +24,8 @@ type memory_type is array (0 to 2**words -1)
 
 signal memory : memory_type := (
     0 => x"0000000A", -- Valor 10 na posição 0
-    1 => x"00000005", -- Valor 5 na posição 4
+    1 => x"00000005", -- Valor 5 na posição 1
+	 200 => x"0FFFFFFFB", -- Valor -5 na posição 200
     others => (others => '0')
 );
 
@@ -40,9 +41,7 @@ begin
     end if;
 end process;
 
--- BUG 2 CORRIGIDO: Leitura COMBINACIONAL (era síncrona, causava atraso de 1 ciclo)
 -- LerMem controla se a saída é válida ou zero
-DataOut    <= memory(to_integer(unsigned(Addr_in))) when LerMem = '1' else (others => '0');
-
+DataOut <= memory(to_integer(unsigned(Addr_in))) when LerMem = '1' else (others => '0');
 
 end arq;

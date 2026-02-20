@@ -27,7 +27,7 @@ signal PC_reg      : unsigned(7 downto 0) := (others => '0');
 signal instrucao   : std_logic_vector(31 downto 0);
 signal imm_ext     : std_logic_vector(31 downto 0);
 signal mux_DS      : std_logic_vector(4 downto 0);
-signal ALU_result  : std_logic_vector(31 downto 0); -- saída PURA da ALU (BUG 1)
+signal ALU_result  : std_logic_vector(31 downto 0); -- saída PURA da ALU
 signal RAM_out     : std_logic_vector(31 downto 0);
 signal B_OUT_int   : std_logic_vector(31 downto 0);
 
@@ -39,8 +39,6 @@ begin
         PC_reg <= (others => '0');
 
     elsif rising_edge(clk) then
-
-        --   agora usa instrucao(15 downto 0) completo, redimensionado para 8 bits com sinal
         if Jump = '1' then
 			 PC_reg <= unsigned(instrucao(7 downto 0));  -- endereço absoluto
 			elsif (Branch = '1' and ALU_result = x"00000000") then
@@ -92,7 +90,7 @@ DP_INST: entity work.datapath
         MF => MF,
         MD => MD,
         MB => MB,
-        S => open,          -- verificar depois
+        S => open,          -- Não usamos BUS_D do datapath
         ALU_result => ALU_result, 
         Datain => RAM_out,
         constantin => imm_ext,

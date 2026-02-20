@@ -15,8 +15,6 @@ port(
     MD: in std_logic;
     MB: in std_logic;
     S: out std_logic_vector(31 downto 0);
-    -- BUG 1 CORRIGIDO: nova saída com resultado puro da ALU (antes do mux MD)
-    -- necessária para endereçar a RAM e verificar condição do Branch
     ALU_result: out std_logic_vector(31 downto 0);
     Datain: in std_logic_vector(31 downto 0);
     constantin: in std_logic_vector(31 downto 0);
@@ -86,10 +84,9 @@ begin
     -- MUX MB: seleciona entre registrador B ou constante imediata
     BUS_B <= B_OUT when MB = '0' else constantin;
 
-    -- S = saída do MUX D, entra no banco de registradores
-    S <= BUS_D;
+    -- S = saída do MUX D, não usamos
+    S <= BUS_D; 
 
-    -- BUG 1 CORRIGIDO: expõe S_OUT puro da ALU (sem passar pelo mux MD)
     -- Usado em ParteOperativa para endereçar RAM e verificar Branch
     ALU_result <= S_OUT;
 

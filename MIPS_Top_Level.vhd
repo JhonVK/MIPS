@@ -8,7 +8,6 @@ entity MIPS_Top_Level is
 end MIPS_Top_Level;
 
 architecture shell of MIPS_Top_Level is
-    -- Sinais de união entre Controle e Operativa
     signal s_opcode, s_funct : std_logic_vector(5 downto 0);
     signal s_RegDst, s_EscReg, s_Jump, s_ULAFonte, s_EscMem, s_LerMem, s_MemParaReg, s_Branch : std_logic;
     signal s_gsel : std_logic_vector(3 downto 0);

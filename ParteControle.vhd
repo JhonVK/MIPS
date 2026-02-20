@@ -90,7 +90,6 @@ begin
 
             when "000100" =>
                 Branch <= '1';
-                -- BUG 3 CORRIGIDO: era "0110" = A-B-1, BEQ nunca detectava igualdade
                 -- Agora usa "0100" = A-B, resultado é 0 quando A == B (correto)
                 gsel   <= "0100";
 				
