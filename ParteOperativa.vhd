@@ -9,6 +9,7 @@ entity ParteOperativa is
         RegDst      : in std_logic;
         HS          : in std_logic_vector(1 downto 0);
         MF          : in std_logic;
+		  Jump 		  : in std_logic;
         MD          : in std_logic;
         MB          : in std_logic;
         gsel        : in std_logic_vector(3 downto 0);
@@ -32,9 +33,6 @@ signal B_OUT_int   : std_logic_vector(31 downto 0);
 
 begin
 
--- =============================
--- PROGRAM COUNTER COM BRANCH
--- =============================
 process(clk, reset)
 begin
     if reset = '1' then
@@ -42,48 +40,46 @@ begin
 
     elsif rising_edge(clk) then
 
-        -- BUG 1 CORRIGIDO: Branch verifica ALU_result (puro), não ALU_out (mux D)
-        -- BUG 4 CORRIGIDO: offset vinha de instrucao(7 downto 0), eram só 8 bits
         --   agora usa instrucao(15 downto 0) completo, redimensionado para 8 bits com sinal
-        if (Branch = '1' and ALU_result = x"00000000") then
-            PC_reg <= PC_reg + 1 + unsigned(resize(signed(instrucao(15 downto 0)), 8));
-        else
-            PC_reg <= PC_reg + 1;
-        end if;
+        if Jump = '1' then
+			 PC_reg <= unsigned(instrucao(7 downto 0));  -- endereço absoluto
+			elsif (Branch = '1' and ALU_result = x"00000000") then
+				 PC_reg <= PC_reg + 1 + unsigned(resize(signed(instrucao(15 downto 0)), 8));
+			else
+				 PC_reg <= PC_reg + 1;
+			end if;
 
     end if;
 end process;
 
--- =============================
 -- ROM
--- =============================
+
 ROM_INST: entity work.mem_32
     port map (
         Addr_in => std_logic_vector(PC_reg),
         DataOut => instrucao
     );
 
--- =============================
+
 -- Decodificação
--- =============================
+
 opcode <= instrucao(31 downto 26);
 funct  <= instrucao(5 downto 0);
 
--- =============================
 -- Extensão de sinal do imediato
--- =============================
+
 imm_ext <= std_logic_vector(resize(signed(instrucao(15 downto 0)), 32));
 
--- =============================
+
 -- MUX RegDst: escolhe registrador destino
--- =============================
+
 mux_DS <= instrucao(20 downto 16)
           when RegDst = '0'
           else instrucao(15 downto 11);
 
--- =============================
+
 -- DATAPATH
--- =============================
+
 DP_INST: entity work.datapath
     port map (
         clk => clk,
@@ -97,7 +93,7 @@ DP_INST: entity work.datapath
         MD => MD,
         MB => MB,
         S => open,          -- verificar depois
-        ALU_result => ALU_result,  -- BUG 1 CORRIGIDO: saída pura da ALU
+        ALU_result => ALU_result, 
         Datain => RAM_out,
         constantin => imm_ext,
         gsel => gsel,
@@ -105,15 +101,13 @@ DP_INST: entity work.datapath
         OUT_B => B_OUT_int
     );
 
--- =============================
 -- RAM
--- =============================
+
 RAM_INST: entity work.mem_dados_32
     port map (
         clk => clk,
         EscMem => EscMem,
         LerMem => LerMem,
-        -- BUG 1 CORRIGIDO: endereço usa ALU_result (puro), não ALU_out (mux D)
         Addr_in => ALU_result(7 downto 0),
         DataIn => B_OUT_int,
         DataOut => RAM_out

@@ -10,7 +10,7 @@ end MIPS_Top_Level;
 architecture shell of MIPS_Top_Level is
     -- Sinais de união entre Controle e Operativa
     signal s_opcode, s_funct : std_logic_vector(5 downto 0);
-    signal s_RegDst, s_EscReg, s_ULAFonte, s_EscMem, s_LerMem, s_MemParaReg, s_Branch : std_logic;
+    signal s_RegDst, s_EscReg, s_Jump, s_ULAFonte, s_EscMem, s_LerMem, s_MemParaReg, s_Branch : std_logic;
     signal s_gsel : std_logic_vector(3 downto 0);
 begin
 
@@ -25,6 +25,7 @@ begin
         LerMem => s_LerMem,
         MemParaReg => s_MemParaReg,
         Branch => s_Branch,
+		  Jump => s_Jump,
         gsel => s_gsel
     );
 
@@ -34,7 +35,7 @@ begin
             LE => s_EscReg, RegDst => s_RegDst,
             HS => "00", MF => '0', MD => s_MemParaReg, MB => s_ULAFonte,
             gsel => s_gsel, EscMem => s_EscMem, LerMem => s_LerMem,
-            Branch => s_Branch, opcode => s_opcode, funct => s_funct
+            Branch => s_Branch, opcode => s_opcode, Jump => s_Jump, funct => s_funct
         );
 
 end shell;

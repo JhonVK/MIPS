@@ -60,7 +60,7 @@ begin
             --   Resultado = A(15:0) * B(15:0), 32 bits
             --   Ex: 10 * 5 = 50 (0x00000032)
             when "0000" =>
-                S_ULA <= MULT_OUT;
+                S_ULA <= A;
 
             when "0001" =>
                 B_SOMADOR <= B;
@@ -106,7 +106,7 @@ begin
             when "1100" => S_ULA <= NOT B;
             when "1101" => S_ULA <= A OR  (NOT B);
             when "1110" => S_ULA <= A AND (NOT B);
-            when "1111" => S_ULA <= A XOR (NOT B);
+            when "1111" => S_ULA <= MULT_OUT;
 
             when others => S_ULA <= (others => '0');
 
