@@ -25,7 +25,7 @@ type memory_type is array (0 to 2**words -1)
 signal memory : memory_type := (
     0 => x"0000000A", -- Valor 10 na posição 0
     1 => x"00000005", -- Valor 5 na posição 1
-	 200 => x"0FFFFFFFB", -- Valor -5 na posição 200
+	 200 => x"FFFFFFFB", -- Valor -5 na posição 200
     others => (others => '0')
 );
 

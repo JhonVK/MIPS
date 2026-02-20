@@ -24,7 +24,6 @@ begin
     process(opcode, funct)
     begin
 
-        -- Valores padrão
         RegDst     <= '0';
         EscReg     <= '0';
         ULAFonte   <= '0';
@@ -38,13 +37,12 @@ begin
         case opcode is
 
             -- TIPO R
-				
             when "000000" =>
                 RegDst <= '1';
                 EscReg <= '1';
 
                 case funct is
-                    -- Mapeamento baseado na sua tabela da ULA
+
                     when "101001" => gsel <= "0000"; -- MOVE A
                     when "101010" => gsel <= "0001"; -- MOVE B
                     when "100000" => gsel <= "0010"; -- ADD (A + B)
@@ -76,7 +74,6 @@ begin
                 gsel       <= "0010";  -- ADD para calcular endereço
 
 
-
             -- SW  (opcode = 101011)
 
             when "101011" =>
@@ -85,12 +82,10 @@ begin
                 gsel     <= "0010";  -- ADD para calcular endereço
 
 
-
-            -- BEQ (opcode = 000100)
+					 -- BEQ (opcode = 000100)
 
             when "000100" =>
                 Branch <= '1';
-                -- Agora usa "0100" = A-B, resultado é 0 quando A == B (correto)
                 gsel   <= "0100";
 				
 				
