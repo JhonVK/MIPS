@@ -11,6 +11,8 @@ architecture shell of MIPS_Top_Level is
     signal s_opcode, s_funct : std_logic_vector(5 downto 0);
     signal s_RegDst, s_EscReg, s_Jump, s_ULAFonte, s_EscMem, s_LerMem, s_MemParaReg, s_Branch : std_logic;
     signal s_gsel : std_logic_vector(3 downto 0);
+	 signal s_MF : std_logic;
+	 signal s_HS : std_logic_vector(1 downto 0);
 begin
 
     CONTROLE: entity work.ParteControle
@@ -25,16 +27,28 @@ begin
         MemParaReg => s_MemParaReg,
         Branch => s_Branch,
 		  Jump => s_Jump,
-        gsel => s_gsel
+        gsel => s_gsel,
+		  MF => s_MF,
+		  HS => s_HS
     );
 
     OPERATIVA: entity work.ParteOperativa
         port map (
-            clk => clk, reset => reset,
-            LE => s_EscReg, RegDst => s_RegDst,
-            HS => "00", MF => '0', MD => s_MemParaReg, MB => s_ULAFonte,
-            gsel => s_gsel, EscMem => s_EscMem, LerMem => s_LerMem,
-            Branch => s_Branch, opcode => s_opcode, Jump => s_Jump, funct => s_funct
+            clk => clk,
+				reset => reset,
+            LE => s_EscReg,
+				RegDst => s_RegDst,
+            HS => s_HS,
+				MF => s_MF,
+				MD => s_MemParaReg,
+				MB => s_ULAFonte,
+            gsel => s_gsel,
+				EscMem => s_EscMem,
+				LerMem => s_LerMem,
+            Branch => s_Branch,
+				opcode => s_opcode,
+				Jump => s_Jump,
+				funct => s_funct
         );
 
 end shell;

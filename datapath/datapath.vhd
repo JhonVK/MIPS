@@ -14,11 +14,10 @@ port(
     MF: in std_logic;
     MD: in std_logic;
     MB: in std_logic;
-    S: out std_logic_vector(31 downto 0);
-    ALU_result: out std_logic_vector(31 downto 0);
     Datain: in std_logic_vector(31 downto 0);
     constantin: in std_logic_vector(31 downto 0);
     gsel : in std_logic_vector(3 downto 0);
+	 FUNCTION_UNIT_result: out std_logic_vector(31 downto 0);
     Cout : out std_logic;
     OUT_B : out std_logic_vector(31 downto 0)
 );
@@ -81,15 +80,13 @@ begin
     -- MUX MD: seleciona entre resultado da ALU ou dado vindo da RAM
     BUS_D <= S_OUT when MD = '0' else Datain;
 
-    -- MUX MB: seleciona entre registrador B ou constante imediata
+    -- MUX MB: seleciona entre registrador B ou 16 bits com extensão de sinal
     BUS_B <= B_OUT when MB = '0' else constantin;
 
-    -- S = saída do MUX D, não usamos
-    S <= BUS_D; 
-
     -- Usado em ParteOperativa para endereçar RAM e verificar Branch
-    ALU_result <= S_OUT;
-
+    FUNCTION_UNIT_result <= S_OUT;
+		
+	 -- Valor puro do registrador B
     OUT_B <= B_OUT;
 
 end arq;

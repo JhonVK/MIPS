@@ -23,11 +23,11 @@ end ParteOperativa;
 
 architecture arq of ParteOperativa is
 
-signal PC_reg      : unsigned(7 downto 0) := (others => '0');
+signal PC_reg      : unsigned(31 downto 0) := (others => '0');
 signal instrucao   : std_logic_vector(31 downto 0);
 signal imm_ext     : std_logic_vector(31 downto 0);
 signal mux_DS      : std_logic_vector(4 downto 0);
-signal ALU_result  : std_logic_vector(31 downto 0); -- saída PURA da ALU
+signal FUNCTION_UNIT_result  : std_logic_vector(31 downto 0);
 signal RAM_out     : std_logic_vector(31 downto 0);
 signal B_OUT_int   : std_logic_vector(31 downto 0);
 
@@ -40,9 +40,9 @@ begin
 
     elsif rising_edge(clk) then
         if Jump = '1' then
-			 PC_reg <= unsigned(instrucao(7 downto 0));  -- endereço absoluto
-			elsif (Branch = '1' and ALU_result = x"00000000") then
-				 PC_reg <= PC_reg + 1 + unsigned(resize(signed(instrucao(15 downto 0)), 8));
+			 PC_reg <= resize(unsigned(instrucao(25 downto 0)), 32);
+			elsif (Branch = '1' and FUNCTION_UNIT_result = x"00000000") then
+				 PC_reg <= PC_reg + 1 + unsigned(resize(signed(instrucao(15 downto 0)), 32));
 			else
 				 PC_reg <= PC_reg + 1;
 			end if;
@@ -54,7 +54,7 @@ end process;
 
 ROM_INST: entity work.mem_32
     port map (
-        Addr_in => std_logic_vector(PC_reg),
+        Addr_in => std_logic_vector(PC_reg(7 downto 0)), -- 8 bits endereço
         DataOut => instrucao
     );
 
@@ -90,8 +90,7 @@ DP_INST: entity work.datapath
         MF => MF,
         MD => MD,
         MB => MB,
-        S => open,          -- Não usamos BUS_D do datapath
-        ALU_result => ALU_result, 
+        FUNCTION_UNIT_result => FUNCTION_UNIT_result, 
         Datain => RAM_out,
         constantin => imm_ext,
         gsel => gsel,
@@ -106,7 +105,7 @@ RAM_INST: entity work.mem_dados_32
         clk => clk,
         EscMem => EscMem,
         LerMem => LerMem,
-        Addr_in => ALU_result(7 downto 0),
+        Addr_in => FUNCTION_UNIT_result(7 downto 0),
         DataIn => B_OUT_int,
         DataOut => RAM_out
     );

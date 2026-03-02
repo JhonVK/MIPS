@@ -14,7 +14,9 @@ entity ParteControle is
         MemParaReg : out std_logic;
         Branch     : out std_logic;
 		  Jump 		 : out std_logic;
-        gsel       : out std_logic_vector(3 downto 0)
+        gsel       : out std_logic_vector(3 downto 0);
+		  MF			 : out std_logic;
+		  HS			 : out std_logic_vector(1 downto 0)
     );
 end ParteControle;
 
@@ -33,6 +35,8 @@ begin
         Branch     <= '0';
 		  Jump 		 <= '0';
         gsel       <= "0000";
+		  MF			 <= '0';
+		  HS 			 <= "00";
 
         case opcode is
 
@@ -59,6 +63,14 @@ begin
                     when "111101" => gsel <= "1101"; -- A or (not B)
                     when "111110" => gsel <= "1110"; -- A and (not B)
                     when "011000" => gsel <= "1111"; -- A x B (MULT)
+						  when "000100" => MF	<= '1';	  -- Shift Left
+												 HS   <= "01";
+												 EscReg <= '1';
+												 RegDst <= '1';
+						  when "000110" => MF <= '1';		  -- Shift Right
+												 HS <= "10";
+												 EscReg <= '1';
+												 RegDst <= '1';
 
                     when others   => gsel <= "0000";
                 end case;
